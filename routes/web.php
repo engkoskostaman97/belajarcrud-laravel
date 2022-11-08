@@ -23,3 +23,4 @@ Route::get(
 Route::get('/getData', [BarangController::class, 'getData']);
 Route::post('/pushData', [BarangController::class, 'store']);
 Route::post('/setData', [BarangController::class, 'update']);
+Route::get('/delete/{id}', [BarangController::class, 'hapus']);

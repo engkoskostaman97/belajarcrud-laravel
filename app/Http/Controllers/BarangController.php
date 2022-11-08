@@ -26,21 +26,20 @@ class BarangController extends Controller
         $this->validate(
             $request,
             [
-                'file' => 'requires|max:2048'
+                'file' => 'required|max:2048'
             ]
         );
-
         $file = $request->file('file');
-        $name_file = time() . "-" . $file->getClientOriginalName();
+        $nama_file = time() . "-" . $file->getClientOriginalName();
 
         $tujuan_upload = 'data_file';
-        if ($file->move($tujuan_upload, $name_file)) {
+        if ($file->move($tujuan_upload, $nama_file)) {
             $data = tbl_katalog::create(
                 [
                     'nama_produk' => $request->nama_produk,
                     'berat' => $request->berat,
                     'harga' => $request->harga,
-                    'gambar' => $name_file,
+                    'gambar' => $nama_file,
                     'keterangan' => $request->keterangan,
                 ]
             );
@@ -98,4 +97,20 @@ class BarangController extends Controller
             }
         }
     }
+    public function hapus($id)
+    {
+        $data = DB::table('tbl_katalog')->where('id', $id)->get();
+        foreach ($data as $katalog) {
+            if (file_exists(public_path('data_file/' . $katalog->gambar))) {
+                @unlink(public_path('data_file/' . $katalog->gambar));
+                DB::table('tbl_katalog')->where('id', $id)->delete();
+                $res['message'] = "Succes";
+                return response($res);
+            } else {
+                $res['message'] = "Empty!";
+                return response($res);
+            }
+        }
+    }
+
 }
