@@ -21,3 +21,5 @@ Route::get(
 );
 
 Route::get('/getData', [BarangController::class, 'getData']);
+Route::post('/pushData', [BarangController::class, 'store']);
+
